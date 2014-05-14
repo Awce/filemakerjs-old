@@ -1,0 +1,30 @@
+{
+  "name": "filemaker",
+  "version": "0.0.1",
+  "description": "FileMaker Server JavaScript Client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/toddgeist/filemakerjs.git"
+  },
+  "keywords": [
+    "filemaker",
+    "node",
+    "javascript"
+  ],
+  "author": "Todd Geist",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/toddgeist/filemakerjs/issues"
+  },
+  "homepage": "https://github.com/toddgeist/filemakerjs",
+  "dependencies": {
+    "superagent": "^0.18.0",
+    "xml2js": "^0.4.2",
+    "superagent-xml2jsparser": "^0.1.0",
+    "qs": "^0.6.6"
+  }
+}
