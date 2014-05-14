@@ -13,33 +13,25 @@ module.exports = FileMaker;
 
 function FileMaker(options){
 
-    if(!(this instanceof FileMaker) ) return new FileMaker(options)
-    this.url = options.url;
+    if(!(this instanceof FileMaker) ) return new FileMaker(options);
+
+    var re = new RegExp("^(http|https)://", "i");
+    this.url = options.url.replace(re , '');
+
+    this.protocol = options.protocol || "http";
+
     this.userName = options.userName || "Admin";
     this.password = options.password || '';
 
     this.getBaseURL = function(){
-        return this.url +'/fmi/xml/fmresultset.xml'
+        return this.protocol + "://"+ this.userName + ":" + this.password + "@" + this.url +"/fmi/xml/fmresultset.xml"
     }
 }
 
 
-FileMaker.prototype.getInfo = function(){
-    request
-        .post(this.url +'/fmi/xml/fmresultset.xml?-db=FMServer_Sample&-lay=PHP Technology Test&-findall=')
-        .accept('xml')
-        .parse(customParser)
-        .end(function(err, res){
-            console.log(res.body)
-        })
-}
-
-
 FileMaker.prototype.req = function(object){
-
     request
         .post(this.getBaseURL())
-        .auth()
         .accept('xml')
         .query(object)
         .parse(customParser)
@@ -64,7 +56,7 @@ FMQuery.prototype.lay =  function(layoutName){
 
 FMQuery.prototype.findAll =  function(){
     this.queryParams['-findall'] = null
-    this.FM.req(this.queryParams);
+    return this
 }
 
 
@@ -75,8 +67,22 @@ FMQuery.prototype.getURL = function(){
 
 FMQuery.prototype.dbnames = function(){
     this.queryParams['-dbnames'] = null
+    return this
+}
+
+FMQuery.prototype.layoutnames = function(){
+    this.queryParams['-layoutnames'] = null
+    return this
+}
+
+FMQuery.prototype.end = function(){
     this.FM.req(this.queryParams);
 }
+
+
+
+
+
 
 
 FileMaker.prototype.query =  function(){
