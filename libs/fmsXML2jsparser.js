@@ -13,8 +13,8 @@ function fmsParser(xml, fn){
     xml.fmresultset.resultset[0].record.forEach(function(object){
 
         var record = {}
-        record['modid'] = object.$['mod-id'];
-        record['recordid'] = object.$['record-id'];
+        record['modid'] = parseInt(object.$['mod-id']);
+        record['recordid'] = parseInt(object.$['record-id']);
 
         object.field.forEach(function(field){
             var value = field.data[0]
@@ -26,9 +26,9 @@ function fmsParser(xml, fn){
     })
 
     var collection = {
-        error: xml.fmresultset.error[0].$.code,
-        count: xml.fmresultset.resultset[0].$.count,
-        fetchSize: xml.fmresultset.resultset[0].$['fetch-size'],
+        error: parseInt(xml.fmresultset.error[0].$.code),
+        count: parseInt(xml.fmresultset.resultset[0].$.count),
+        fetchSize: parseInt(xml.fmresultset.resultset[0].$['fetch-size']),
         data: d2
     }
 

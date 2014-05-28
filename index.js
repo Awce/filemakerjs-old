@@ -29,15 +29,13 @@ function FileMaker(options){
 }
 
 
-FileMaker.prototype.req = function(object){
+FileMaker.prototype.req = function(object, cb){
     request
         .post(this.getBaseURL())
         .accept('xml')
         .query(object)
         .parse(customParser)
-        .end(function(err, res){
-            console.log(res.body);
-        })
+        .end(cb)
 }
 
 function FMQuery(FM){
