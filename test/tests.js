@@ -44,7 +44,6 @@ describe("FileMakerJS", function(){
         it('expects to get an object with an error property equal to 0', function(done){
             function callback(response){
                 var json = response.body
-                console.log(json);
                 expect(json).to.be.a('object')
                     .that.has.property('error')
                     .that.equals(0)
@@ -74,6 +73,63 @@ describe("FileMakerJS", function(){
             fm.req(options, callback);
         })
 
+    })
+
+    describe("req() get layouts", function(){
+        var options = {
+            "-db" : "FMServer_Sample",
+            "-layoutnames" : null
+        }
+
+        it('expects to get back a array with more than 0 elements', function(done){
+            function callback(response){
+                var collection = response.body.data
+                expect(collection).to.be.a('array')
+                    .that.has.length.above(0)
+                done();
+            }
+            fm.req(options, callback);
+        })
+
+        it("expects to get a record with a 'LAYOUT_NAME' field ", function(done){
+            function callback(response){
+
+                var record = response.body.data[0];
+                expect(record).to.have.property('LAYOUT_NAME');
+                done();
+            }
+            fm.req(options, callback);
+        })
+
+        describe("req() get scripts", function() {
+            var options = {
+                "-db": "FMServer_Sample",
+                "-scriptnames": null
+            }
+
+            it('expects to get back a array with more than 0 elements', function (done) {
+                function callback(response) {
+                    var collection = response.body.data
+                    expect(collection).to.be.a('array')
+                        .that.has.length.above(0)
+                    done();
+                }
+
+                fm.req(options, callback);
+            })
+
+            it("expects to get a record with a 'LAYOUT_NAME' field ", function (done) {
+                function callback(response) {
+
+                    var record = response.body.data[0];
+                    console.log(record)
+                    expect(record).to.have.property('SCRIPT_NAME');
+                    done();
+                }
+
+                fm.req(options, callback);
+            })
+        })
     })
 
 })
