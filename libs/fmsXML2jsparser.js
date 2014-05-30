@@ -8,22 +8,28 @@ var parseString = require('xml2js').parseString;
 
 
 
-function fmsParser(xml, fn){
+function fmResultSetParser(xml, fn){
     var d2 = []
-    xml.fmresultset.resultset[0].record.forEach(function(object){
 
-        var record = {}
-        record['modid'] = parseInt(object.$['mod-id']);
-        record['recordid'] = parseInt(object.$['record-id']);
+    var thereIsSomeData = xml.fmresultset.resultset[0].$.count > 0
 
-        object.field.forEach(function(field){
-            var value = field.data[0]
-            record[field.$.name] = value
+    if(thereIsSomeData){
+        xml.fmresultset.resultset[0].record.forEach(function(object){
+
+            var record = {}
+            record['modid'] = parseInt(object.$['mod-id']);
+            record['recordid'] = parseInt(object.$['record-id']);
+
+            object.field.forEach(function(field){
+                var value = field.data[0]
+                record[field.$.name] = value
+            })
+
+
+            d2.push(record);
         })
+    }
 
-
-        d2.push(record);
-    })
 
     var collection = {
         error: parseInt(xml.fmresultset.error[0].$.code),
@@ -39,7 +45,7 @@ function fmsParser(xml, fn){
 
 function parser(xml, fn){
     parseString( xml, function(err, xml){
-         fmsParser(xml, fn);
+        fmResultSetParser(xml, fn);
     })
 }
 

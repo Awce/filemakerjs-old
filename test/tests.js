@@ -75,6 +75,26 @@ describe("FileMakerJS", function(){
 
     })
 
+    describe('req({-wrong : null}) ', function(){
+        it( 'expects to get an error of 4' , function(done){
+
+            var badOptions = {
+                "-wrong" : null
+            }
+
+            function callback(response){
+                var json = response.body
+                expect(json).to.be.a('object')
+                    .that.has.property('error')
+                    .that.equals(4);
+                done();
+            }
+
+            fm.req(badOptions, callback);
+
+        } )
+    })
+
     describe("req() get layouts", function(){
         var options = {
             "-db" : "FMServer_Sample",
@@ -122,7 +142,6 @@ describe("FileMakerJS", function(){
                 function callback(response) {
 
                     var record = response.body.data[0];
-                    console.log(record)
                     expect(record).to.have.property('SCRIPT_NAME');
                     done();
                 }
