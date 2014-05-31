@@ -8,82 +8,81 @@ var customParser = require('./libs/fmsXML2jsparser');
 var qs = require('qs');
 
 
-module.exports = FileMaker;
+/**
+ * FileMaker connector
+ * @constructor
+ */
+function FileMaker() {
+}
 
+FileMaker.prototype.init = function (options) {
 
-function FileMaker(options){
-
-    if(!(this instanceof FileMaker) ) return new FileMaker(options);
+    //if(!(this instanceof FileMaker) ) return new FileMaker(options);
 
     var re = new RegExp("^(http|https)://", "i");
-    this.url = options.url.replace(re , '');
+    this.url = options.url.replace(re, '');
 
     this.protocol = options.protocol || "http";
 
     this.userName = options.userName || "Admin";
     this.password = options.password || '';
 
-    this.getBaseURL = function(){
-        return this.protocol + "://"+ this.userName + ":" + this.password + "@" + this.url +"/fmi/xml/fmresultset.xml"
+    this.getBaseURL = function () {
+        return this.protocol + "://" + this.userName + ":" + this.password + "@" + this.url + "/fmi/xml/fmresultset.xml"
     }
+
+
 }
-
-
-FileMaker.prototype.req = function(object, cb){
+/**
+ * sends a request to the FileMaker Server
+ * @param queryObject
+ * @param callback
+ */
+FileMaker.prototype.req = function (queryObject, callback) {
     request
         .post(this.getBaseURL())
         .accept('xml')
-        .query(object)
+        .query(queryObject)
         .parse(customParser)
-        .end(cb)
-}
-
-function FMQuery(FM){
-    this.queryParams = {};
-    this.FM = FM
-}
-
-FMQuery.prototype.db =  function(dbname){
-    this.queryParams['-db'] = dbname
-    return this
-}
-FMQuery.prototype.lay =  function(layoutName){
-    this.queryParams['-lay']= layoutName
-    return this
-}
-
-FMQuery.prototype.findAll =  function(){
-    this.queryParams['-findall'] = null
-    return this
+        .end(function (err, response) {
+            if (err) {
+                callback(err)
+            } else {
+                callback(null, response.body)
+            }
+        })
 }
 
 
+FileMaker.prototype.getDatabases = function (callback) {
 
-FMQuery.prototype.getURL = function(){
-    return this.FM.getBaseURL() +"?" + qs.stringify(this.queryParams)
+    this.req({'-dbnames': null}, callback)
+
 }
 
-FMQuery.prototype.dbnames = function(){
-    this.queryParams['-dbnames'] = null
-    return this
-}
+FileMaker.prototype.getDatabase = function (databaseName, callback) {
 
-FMQuery.prototype.layoutnames = function(){
-    this.queryParams['-layoutnames'] = null
-    return this
-}
-
-FMQuery.prototype.end = function(){
-    this.FM.req(this.queryParams);
-}
+    this.getDatabases(function (err, result) {
 
 
+        if (err) {
+            callback(err);
+        } else {
+            var db = result.data.filter(function (obj) {
+                return obj.DATABASE_NAME == databaseName;
+            })
 
-
-
-
-
-FileMaker.prototype.query =  function(){
-    return new FMQuery(this)
+            if(db == undefined){
+                callback(new Error("Database name not vaild"))
+            }else{
+                callback(null, {
+                    error : 0,
+                    data : [db[0]]
+                })
+            }
+        }
+    })
 };
 
+
+module.exports = exports = new FileMaker();

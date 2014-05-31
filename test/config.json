@@ -3,5 +3,8 @@
         "url" : "fm12.geistinteractive.net",
         "userName" : "xml",
         "password" : "xml"
+    },
+    "testData" : {
+        "dbName" : "FMServer_Sample"
     }
 }
