@@ -3,17 +3,23 @@
  */
 
 
-var request = require('superagent');
-var customParser = require('./libs/fmsXML2jsparser');
-var qs = require('qs');
+var Promise = require('bluebird'),
+    request = Promise.promisifyAll( require('superagent')),
+    customParser = require('./libs/fmsXML2jsparser'),
+    qs = require('qs');
+
+//add a .promise method to superagent
+require('./libs/superagentPromise');
+
 
 
 /**
  * FileMaker connector
  * @constructor
  */
-function FileMaker() {
-}
+function FileMaker() {}
+
+
 
 FileMaker.prototype.init = function (options) {
 
@@ -27,62 +33,73 @@ FileMaker.prototype.init = function (options) {
     this.userName = options.userName || "Admin";
     this.password = options.password || '';
 
-    this.getBaseURL = function () {
-        return this.protocol + "://" + this.userName + ":" + this.password + "@" + this.url + "/fmi/xml/fmresultset.xml"
-    }
+
 
 
 }
+
+FileMaker.prototype.getBaseURL = function () {
+    return this.protocol + "://" + this.userName + ":" + this.password + "@" + this.url + "/fmi/xml/fmresultset.xml"
+}
+
+FileMaker.prototype.getBaseURLnoAuth = function () {
+    return this.protocol + "://" + this.url + "/fmi/xml/fmresultset.xml"
+}
+
 /**
  * sends a request to the FileMaker Server
  * @param queryObject
  * @param callback
  */
 FileMaker.prototype.req = function (queryObject, callback) {
-    request
-        .post(this.getBaseURL())
+
+    var promise = request.post(this.getBaseURL())
         .accept('xml')
         .query(queryObject)
-        .parse(customParser)
-        .end(function (err, response) {
-            if (err) {
-                callback(err)
-            } else {
-                callback(null, response.body)
-            }
-        })
-}
+        .parse(customParser).promise()
 
+    return promise
+        .then(function(response){
+            return response.body
+        }).catch(function(e){
+            return new Promise.reject(e)
+        }).nodeify(callback)
+
+}
 
 FileMaker.prototype.getDatabases = function (callback) {
 
-    this.req({'-dbnames': null}, callback)
+    var requestPromise =  this.req({'-dbnames': null})
+    return requestPromise.nodeify(callback)
 
 }
 
 FileMaker.prototype.getDatabase = function (databaseName, callback) {
 
-    this.getDatabases(function (err, result) {
+    // get a Promise here, by leaving out the callback
+    // it will be applied later
+    var requestPromise = this.getDatabases()
 
-
-        if (err) {
-            callback(err);
-        } else {
+        .then(function(result){
             var db = result.data.filter(function (obj) {
                 return obj.DATABASE_NAME == databaseName;
             })
+            if(db.length == 0){
 
-            if(db == undefined){
-                callback(new Error("Database name not vaild"))
+                throw new Error("Database Can't be Found")
+
             }else{
-                callback(null, {
+                return {
                     error : 0,
                     data : [db[0]]
-                })
+                }
             }
-        }
-    })
+        })
+
+        return requestPromise.nodeify(callback); // apply the callback if requested.
+
 };
 
 
 module.exports = exports = new FileMaker();
+

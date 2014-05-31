@@ -10,7 +10,7 @@ before(function(){
     fm.init(config.fms);
 })
 
-describe("FileMakerJS", function(){
+describe("Utilities", function(){
 
 
 
