@@ -6,7 +6,8 @@
 var Promise = require('bluebird'),
     request = Promise.promisifyAll( require('superagent')),
     customParser = require('./libs/fmsXML2jsparser'),
-    qs = require('qs');
+    FMQuery = require('./libs/FMQuery');
+
 
 //add a .promise method to superagent
 require('./libs/superagentPromise');
@@ -33,18 +34,15 @@ FileMaker.prototype.init = function (options) {
     this.userName = options.userName || "Admin";
     this.password = options.password || '';
 
-
-
-
-}
+};
 
 FileMaker.prototype.getBaseURL = function () {
     return this.protocol + "://" + this.userName + ":" + this.password + "@" + this.url + "/fmi/xml/fmresultset.xml"
-}
+};
 
 FileMaker.prototype.getBaseURLnoAuth = function () {
     return this.protocol + "://" + this.url + "/fmi/xml/fmresultset.xml"
-}
+};
 
 /**
  * sends a request to the FileMaker Server
@@ -99,6 +97,9 @@ FileMaker.prototype.getDatabase = function (databaseName, callback) {
         return requestPromise.nodeify(callback); // apply the callback if requested.
 
 };
+
+
+
 
 
 module.exports = exports = new FileMaker();

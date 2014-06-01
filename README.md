@@ -1,4 +1,7 @@
 filemakerjs
 ===========
 
-FileMaker Connection Library for Javascript
+
+Connect to FileMaker Server From node.js
+
+FileMaker 13 and later
