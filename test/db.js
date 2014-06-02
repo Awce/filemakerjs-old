@@ -1,6 +1,5 @@
 
 var chai = require('chai'),
-    expect = chai.expect,
     should = chai.should(),
     fm = require('../'),
     config = require('./config.json'),
@@ -149,7 +148,7 @@ describe('Database Functions With Promises', function(){
 
             });
 
-            it.only('it should be rejected with a status of 401 when given bad credentials', function () {
+            it('it should be rejected with a status of 401 when given bad credentials', function () {
 
                 var promiseOfScriptNames = db.scriptNames().auth("bad", "credentials").send();
 
