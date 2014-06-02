@@ -1,106 +1,244 @@
+
+var postToFMS = require( './libs/filemakerPost');
+
+
 /**
- * Created by todd on 5/13/14.
+ * auth mixin
+ * @param user
+ * @param password
  */
-
-
-var Promise = require('bluebird'),
-    request = Promise.promisifyAll( require('superagent')),
-    customParser = require('./libs/fmsXML2jsparser'),
-    FMQuery = require('./libs/FMQuery');
-
-
-//add a .promise method to superagent
-require('./libs/superagentPromise');
-
+function auth(user, password){
+    this.user = user;
+    this.password = password;
+}
 
 
 /**
- * FileMaker connector
- * @constructor
- */
-function FileMaker() {}
-
-
-
-FileMaker.prototype.init = function (options) {
-
-    //if(!(this instanceof FileMaker) ) return new FileMaker(options);
-
-    var re = new RegExp("^(http|https)://", "i");
-    this.url = options.url.replace(re, '');
-
-    this.protocol = options.protocol || "http";
-
-    this.userName = options.userName || "Admin";
-    this.password = options.password || '';
-
-};
-
-FileMaker.prototype.getBaseURL = function () {
-    return this.protocol + "://" + this.userName + ":" + this.password + "@" + this.url + "/fmi/xml/fmresultset.xml"
-};
-
-FileMaker.prototype.getBaseURLnoAuth = function () {
-    return this.protocol + "://" + this.url + "/fmi/xml/fmresultset.xml"
-};
-
-/**
- * sends a request to the FileMaker Server
- * @param queryObject
+ *
  * @param callback
+ * @returns {*|exports}
  */
-FileMaker.prototype.req = function (queryObject, callback) {
+var post = function(callback){
 
-    var promise = request.post(this.getBaseURL())
-        .accept('xml')
-        .query(queryObject)
-        .parse(customParser).promise()
-
-    return promise
-        .then(function(response){
-            return response.body
-        }).catch(function(e){
-            return new Promise.reject(e)
-        }).nodeify(callback)
-
-}
-
-FileMaker.prototype.getDatabases = function (callback) {
-
-    var requestPromise =  this.req({'-dbnames': null})
-    return requestPromise.nodeify(callback)
-
-}
-
-FileMaker.prototype.getDatabase = function (databaseName, callback) {
-
-    // get a Promise here, by leaving out the callback
-    // it will be applied later
-    var requestPromise = this.getDatabases()
-
-        .then(function(result){
-            var db = result.data.filter(function (obj) {
-                return obj.DATABASE_NAME == databaseName;
-            })
-            if(db.length == 0){
-
-                throw new Error("Database Can't be Found")
-
-            }else{
-                return {
-                    error : 0,
-                    data : [db[0]]
-                }
-            }
-        })
-
-        return requestPromise.nodeify(callback); // apply the callback if requested.
+    var url = this.url() + '/fmi/xml/fmresultset.xml';
+    var q = this.queryObject();
+    var user = this.getUser();
+    var password = this.getPassword();
+    return postToFMS(url, user, password, q ,callback)
 
 };
 
+/**
+ * Creates FileMaker Server Objects
+ * @param url
+ * @returns {{url: Function, auth: Function, getUser: Function, getPassword: Function, send: Function, dbnames: Function, queryObject: Function, db: Function}}
+ */
+function fms(url) {
+
+    var _url = url;
+    var _command = "";
+    return {
+
+        url: function(){
+            return _url;
+        },
+
+        auth: function(){
+            auth.apply(this, arguments);
+            return this
+        },
+        getUser : function(){
+            return this.user
+        },
+        getPassword : function(){
+            return this.password
+        },
+
+        send : function(callback){
+            return post.call(this, callback)
+        },
+
+        //commands
+        dbNames : function(){
+            _command = '-dbnames';
+            return this
+        },
+
+        // get the query
+        queryObject : function(){
+            obj = {};
+            obj[_command] = null;
+            return obj;
+        },
+
+        //factory
+        db : function(name){
+            return db.call(this, name);
+        }
+
+
+    }
+
+}
+
+
+/**
+ * Creates Database Objects
+ * @param name
+ * @returns {{name: Function, auth: Function, getUser: Function, getPassword: Function, fms: Function, layoutNames: Function, scriptNames: Function, send: Function, layout: Function}}
+ */
+function db(name){
+    var _fms = this // will get the FMS instance
+    var _name = name;
+    var _command ='';
+    return {
+        url: function(){
+            return _fms.url();
+        },
+
+        name : function () {
+            return _name
+        },
+
+        auth: function(){
+            auth.apply(this, arguments);
+            return this
+        },
+        getUser : function(){
+            return this.user || _fms.getUser()
+        },
+        getPassword : function(){
+            return this.password || _fms.getPassword()
+        },
+
+
+        send : function(callback){
+            return post.call(this, callback)
+        },
+
+
+        // get the query
+        queryObject : function(){
+            obj = {};
+            obj[_command] = null;
+            obj["-db"] = _name
+            return obj;
+        },
+
+
+        //commands
+
+        layoutNames : function () {
+            _command = "-layoutnames";
+            return this
+        },
+
+        scriptNames: function () {
+            _command = "-scriptnames";
+            return this
+        },
 
 
 
+        fms : function(){
+            return _fms;
+        },
 
-module.exports = exports = new FileMaker();
+        // factories
+        layout : function(name){
+            return layout.call(this, name)
+        }
 
+    }
+}
+
+/**
+ * creates Layout Objects
+ * @param name
+ * @returns {{name: Function, auth: Function, getUser: Function, getPassword: Function, fms: Function, db: Function, findAll: Function}}
+ */
+function layout(name){
+    var _db = this // will get the DB obj that created it
+    var _name = name;
+    var _command ='';
+    var _options = '';
+
+    return {
+        url: function(){
+            return this.fms().url();
+        },
+
+        name : function () {
+            return _name
+        },
+        auth: function(){
+            auth.apply(this, arguments);
+            return this
+        },
+        getUser : function(){
+            return this.user || _db.getUser()
+        },
+        getPassword : function(){
+            return this.password || _db.getPassword()
+        },
+
+        send : function(callback){
+            return post.call(this, callback)
+        },
+
+
+        // get the query
+        queryObject : function(){
+            obj = {};
+            obj["-db"] = this.db().name();
+            obj['-lay'] = _name;
+            obj[_command] = null;
+            return obj;
+        },
+
+
+        fms : function(){
+            return _db.fms();
+        },
+        db : function(){
+            return _db
+        },
+
+        //commands
+        findAll : function () {
+            _command = "-findall";
+            return this
+        },
+
+        find : function (options) {
+            _options = options ;
+            _command = "-find";
+            return this
+        },
+
+        set : function(fieldName, value, operator){
+            options[fieldName]=value;
+            if(operator){
+                options[fieldName+'op']=operator
+            }
+            return this
+        }
+
+
+    }
+}
+
+module.exports.fms = fms;
+
+/*
+
+ may want some of this logic later.
+
+ var re = new RegExp("^(http|https)://", "i");
+ this.url = options.url.replace(re, '');
+
+ this.protocol = options.protocol || "http";
+
+ this.userName = options.userName || "Admin";
+ this.password = options.password || '';
+ */
