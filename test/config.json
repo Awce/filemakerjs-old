@@ -5,7 +5,7 @@
         "password" : "xml"
     },
     "testData" : {
-        "dbName" : "FMServer_Sample",
-        "layout" : "web Tasks"
+        "dbName" : "TestDB",
+        "layout" : "Contacts"
     }
 }

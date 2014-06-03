@@ -9,24 +9,23 @@ var parseString = require('xml2js').parseString;
 
 
 function fmResultSetParser(xml, fn){
-    var d2 = []
+    var d2 = [];
 
     var thereIsSomeData = xml.fmresultset.resultset[0].$.count > 0
 
     if(thereIsSomeData){
         xml.fmresultset.resultset[0].record.forEach(function(object){
 
-            var record = {}
+            var record = {};
             record['modid'] = parseInt(object.$['mod-id']);
             record['recordid'] = parseInt(object.$['record-id']);
 
             object.field.forEach(function(field){
                 var value = field.data[0]
                 record[field.$.name] = value
-            })
-
-
+            });
             d2.push(record);
+
         })
     }
 

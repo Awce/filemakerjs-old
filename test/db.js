@@ -43,7 +43,7 @@ describe('Database Functions Callback Flow', function(){
                 db.layoutNames().send(callback);
 
                 function callback(err, body){
-
+                    console.log(err)
                     body.should.be.an('object')
                         .with.property('data')
                         .that.has.length.of.at.least(1);
