@@ -50,7 +50,7 @@ var fmRequest = {
         var password = this.getPassword();
 
         var fullURL =  url+ "?" + qs.stringify(q);
-
+        //console.log(fullURL);
         var promise = request.post(url)
             .accept('xml')
             .auth(user, password)

@@ -64,7 +64,11 @@ function db(fms, name){
         // factories
         layout : function(name){
             return layout(this, name)
+        },
+        lay : function (name) {
+            return layout(this, name)
         }
+
 
     };
 

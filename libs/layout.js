@@ -13,6 +13,10 @@ function layout(db, name){
     var _name = name;
     var _command ='';
     var _options = {};
+    var _skip, _max;
+    var _data = {}
+    var _script
+
 
     var obj = {
         url: function(){
@@ -25,9 +29,30 @@ function layout(db, name){
 
         // get the query
         queryObject : function(){
-            obj = _options;
+            var obj = {}
             obj["-db"] = this.db().name();
             obj['-lay'] = _name;
+
+            if(_max){
+                obj['-max'] = _max
+            }
+            if(obj !== {}){
+                obj = _.assign(obj, _options);
+            }
+
+            if(_command == "-new"){
+                _.assign(obj, _data);
+            }else if('-script'){
+                _.assign(obj, _script);
+            }
+
+            if(_skip){
+                obj['-skip'] = _max
+            }
+
+
+
+
             obj[_command] = null;
             return obj;
         },
@@ -63,6 +88,11 @@ function layout(db, name){
             return this
         },
 
+        findAny : function () {
+            _command = "-findany";
+            return this
+        },
+
         find : function (options) {
             _options = options ;
             _command = "-find";
@@ -70,24 +100,54 @@ function layout(db, name){
         },
 
         max: function (int) {
-            _options['-max'] = int
+            _max = int
             return this
         },
 
         skip: function (int) {
-            _options['-skip'] = int
+            _skip = int
+            return this
+        },
+
+        delete : function (recordid) {
+            _command='-delete';
+            _data['-recid'] = recordid;
+            return this
+        },
+
+        script : function (name, parameter) {
+            var obj = {}
+            obj['-script'] = name;
+            if (parameter)
+            obj['-script.param'] = parameter
+
+            _script = obj;
+
             return this
         },
 
 
-        /* not sure about this one */
-        set : function(fieldName, value, operator){
-            options[fieldName]=value;
-            if(operator){
-                options[fieldName+'op']=operator
-            }
+        edit : function () {
+            _command = '-edit';
             return this
-        }
+        },
+
+        /**
+         *
+         * @param data
+         * @returns {obj}
+         */
+        newRecord : function (data) {
+            _command = '-new';
+            _data = data
+            return this
+        },
+
+         _reset : function () {
+             _data = {}
+             _options = {}
+             _script = ''
+;         }
     };
     // add the fmRequest methods
     return _.extend(  obj, fmRequest );

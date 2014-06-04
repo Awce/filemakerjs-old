@@ -40,11 +40,15 @@ describe('Layout Functions - Callbacks', function () {
 
         it('should contain an array with 2 items', function (done) {
 
+            var testFirstName = config.testData.records[2].FirstName
+
             layout.findAll().max(2).skip(2).send(callback)
             function callback(err, body){
 
                 var array = body.data;
                 array.should.have.a.lengthOf(2);
+
+                array[0]['FirstName'].should.equal(testFirstName);
                 done();
             }
 

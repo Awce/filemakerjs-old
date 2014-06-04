@@ -6,6 +6,13 @@
     },
     "testData" : {
         "dbName" : "TestDB",
-        "layout" : "Contacts"
+        "layout" : "Contacts",
+        "records"  : [
+            {"FirstName": "Todd", "LastName": "Geist"},
+            {"FirstName": "John", "LastName": "Sindelar"},
+            {"FirstName": "Jason", "LastName": "Young"},
+            {"FirstName": "Jeremy", "LastName": "Bante"},
+            {"FirstName": "Kona", "LastName": "Dog"}
+        ]
     }
 }
