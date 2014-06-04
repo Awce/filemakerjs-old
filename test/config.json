@@ -1,8 +1,8 @@
 {
     "fms" : {
-        "url" : "fm12.geistinteractive.net",
-        "userName" : "xml",
-        "password" : "xml"
+        "url" : "",
+        "userName" : "",
+        "password" : ""
     },
     "testData" : {
         "dbName" : "TestDB",
