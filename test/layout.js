@@ -2,7 +2,7 @@ var chai = require('chai'),
     config = require('./config.json'),
     chaiAsPromised = require("chai-as-promised");
 
-chai.should()
+var should = chai.should()
 chai.use(chaiAsPromised);
 
 describe('Layout Functions - Callbacks', function () {
@@ -38,7 +38,7 @@ describe('Layout Functions - Callbacks', function () {
 
         });
 
-        it('should contain an array with 2 items', function (done) {
+        it('should contain an array with 2 items when using skip and max', function (done) {
 
             var testFirstName = config.testData.records[2].FirstName
 
@@ -55,4 +55,90 @@ describe('Layout Functions - Callbacks', function () {
         })
 
     })
+
+    describe('#findAny()', function () {
+        it( 'should receive a object with a array property "data" that has a length of 1 ', function (done) {
+
+            layout.findAny().max().skip().send(callback);
+
+            function callback(err, body){
+
+                var records = body.data;
+                body.should.be.an('object');
+                records.should.have.a.lengthOf(1)
+                done()
+            }
+        } )
+    });
+
+    describe('#script()', function () {
+        it('should receive an error when give a valid script name' , function (done) {
+            layout.findAny().script(config.testData.script).send(callback)
+
+            function callback(err, body){
+                body.should.be.an('object');
+                should.not.exist(err)
+                done()
+            }
+        })
+    });
+
+    describe('#new({data})', function () {
+        it('should return a single record', function (done) {
+            var data = {firstName : 'test', city: 'Newbury Park'}
+
+            layout.new(data).send(callback);
+
+            function callback(err, result){
+                var records = result.data;
+                var record = records[0];
+                var firstName = record.FirstName
+
+                records.should.have.a.lengthOf(1)
+                firstName.should.equal(data.firstName)
+                done()
+            }
+
+        });
+
+
+    });
+
+
+    describe('#new().setField(field,value)', function () {
+        it('should return an error of 0', function (done) {
+
+            layout
+                .new()
+                .setField("FirstName", "Freddie" )
+                .setField('State', "CA")
+                .send(callback);
+
+            function callback(err, result){
+                var error = result.error;
+                error.should.equal(0)
+                done()
+            }
+
+        });
+    });
+
+
+    describe( "#delete(recordID)", function () {
+        it('should recieve an error value of 0', function (done) {
+
+            layout.findAny().send(function(err, result){
+                var recordID = result.data[0].recordid
+                layout.delete(recordID).send(callback)
+                function callback(err, result){
+                    result.error.should.equal(0)
+                    done()
+                }
+
+            })
+
+
+        })
+    })
+
 });

@@ -67,6 +67,9 @@ function db(fms, name){
         },
         lay : function (name) {
             return layout(this, name)
+        },
+        _reset : function () {
+            // the request asks for this, but it should be a no-op for now
         }
 
 

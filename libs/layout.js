@@ -14,8 +14,13 @@ function layout(db, name){
     var _command ='';
     var _options = {};
     var _skip, _max;
-    var _data = {}
-    var _script
+    var _data = {};
+    var _script;
+    var _recordid;
+    var _findCriteria = {};
+
+    _var _ALLOWED_OPERATORS_ = ['eq', cn, ]
+
 
 
     var obj = {
@@ -42,6 +47,8 @@ function layout(db, name){
 
             if(_command == "-new"){
                 _.assign(obj, _data);
+            }else if(_command == "-delete"){
+                obj['-recid'] = _recordid
             }else if('-script'){
                 _.assign(obj, _script);
             }
@@ -110,8 +117,8 @@ function layout(db, name){
         },
 
         delete : function (recordid) {
-            _command='-delete';
-            _data['-recid'] = recordid;
+            _command = '-delete';
+            _recordid = recordid;
             return this
         },
 
@@ -133,21 +140,41 @@ function layout(db, name){
         },
 
         /**
+         * create Record Request - add data in the form {field: 'data', field2 : 'data2'}
          *
-         * @param data
-         * @returns {obj}
+         * @param {object} [data]
+         * @returns {layout}
          */
-        newRecord : function (data) {
+        new : function (data) {
             _command = '-new';
-            _data = data
+            if (data) _data = data;
             return this
         },
+        /**
+         *
+         * @param {string} fieldName
+         * @param {string}value
+         * @param {string} [operator] only works with finds, ignored for anything else
+         * @returns {obj}
+         */
+        setField: function (fieldName, value, operator) {
+            if (_command === '-find'){
+                _findCriteria[fieldName] = value;
+                if(operator){
+                    _findCriteria[fieldName+'op']=operator
+                }
+            }
+            _data[fieldName] = value;
+            return this
 
+        },
          _reset : function () {
-             _data = {}
-             _options = {}
-             _script = ''
-;         }
+             _data = {};
+             _options = {};
+             _script = '';
+             _recordid = '';
+             _findCriteria = {}
+         }
     };
     // add the fmRequest methods
     return _.extend(  obj, fmRequest );

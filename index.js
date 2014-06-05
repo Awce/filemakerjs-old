@@ -53,6 +53,9 @@ function fms(url) {
         //factory
         db : function(name){
             return db(this, name);
+        },
+        _reset : function () {
+            // the request asks for this, but it should be a no-op for now
         }
     };
 
