@@ -1,5 +1,5 @@
-fm = require('../'),
-    config = require('./config.json'),
+FMS = require('../'),
+    config = require('./config.json')
 
 
 /*
@@ -10,12 +10,11 @@ fm = require('../'),
 
 before(function(done){
 
-    global.fms = fm.
-        fms(config.fms.url)
-        .auth(config.fms.userName, config.fms.password);
+  global.fms = new FMS(config.fms.url)
+      .auth(config.fms.userName, config.fms.password);
 
-
-    //get a query going based on a layout
+        done();
+ /*   //get a query going based on a layout
     var query = fms.db(config.testData.dbName).layout(config.testData.layout);
     var records = config.testData.records;
 
@@ -43,7 +42,9 @@ before(function(done){
             done()
         })
 
-
+*/
 
 
 });
+
+
