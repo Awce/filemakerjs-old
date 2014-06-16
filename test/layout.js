@@ -5,7 +5,7 @@ var chai = require('chai'),
 var should = chai.should()
 chai.use(chaiAsPromised);
 
-describe('Layout Functions - Callbacks', function () {
+describe.skip('Layout Functions - Callbacks', function () {
 
     var layout;
     before(function (done) {
