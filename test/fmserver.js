@@ -65,5 +65,14 @@ describe.only('FMServer', function () {
         })
     })
 
+    describe('#query({"-db": "TestDB", "-layoutnames":null})', function () {
+        it('should return an array', function (done) {
+            fms.query({'-db': "TestDB", '-layoutnames':null}).send(function(err, result){
+                result.data.should.be.an('Array')
+                done()
+            })
+        })
+    })
+
 
 });
