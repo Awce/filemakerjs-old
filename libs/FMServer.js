@@ -2,7 +2,8 @@
 
 var authable        = require('./utils/authable'),
     FMDatabase      = require('./FMDatabase'),
-    DBNames         = require('./commands/DBNames');
+    DBNames         = require('./commands/DBNames'),
+    AdHocQuery      = require('./commands/AdHocCommand');
 
 function FMServer(url){
 
@@ -31,6 +32,12 @@ FMServer.prototype.dbNames = function(){
     command.setParent(this);
     return command
 };
+
+FMServer.prototype.query = function(object){
+    var query = new AdHocQuery(object);
+    query.setParent(this);
+    return query
+}
 
 
 module.exports = FMServer;
