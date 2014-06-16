@@ -20,4 +20,16 @@ AdHocCommand.prototype.getURL = function () {
     return this.getParent().getURL() + grammers.FMPRESULTSET_PATH
 };
 
+AdHocCommand.prototype.set = function(name, val){
+    if (1 == arguments.length) {
+        for (var key in name) {
+            this.set(key, name[key]);
+        }
+    } else {
+        this.qo[name] = val;
+    }
+
+    return this;
+};
+
 module.exports = AdHocCommand;
