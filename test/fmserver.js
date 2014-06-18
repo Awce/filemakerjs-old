@@ -1,6 +1,6 @@
 var chai = require('chai'),
     should = chai.should(),
-    FMServer = require('../index');
+    FMServer = require('../index').Server;
 
 
 describe.only('FMServer', function () {

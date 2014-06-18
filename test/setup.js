@@ -1,4 +1,4 @@
-FMS = require('../'),
+FMS = require('../').Server,
     config = require('./config.json')
 
 
