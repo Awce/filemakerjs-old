@@ -1,20 +1,32 @@
 module.exports = {
 
-    FINDALL     : '-findall',
-    FINDANY     : '-findany',
-    FIND        : '-find',
+    FINDALL         : '-findall',
+    FINDANY         : '-findany',
 
-    DBNAMES     : '-dbnames',
-    LAYOUTNAMES : '-layoutnames',
-    SCRIPTNAMES : '-scriptnames',
 
-    NEW         : '-new',
-    EDIT        : '-edit',
-    DELETE      : '-delete',
-    DUPLICATE   : '-duplicate',
-    SCRIPT      : '-script',
-    LAYOUT      : '-lay',
-    DB          : '-db',
-    LAYOUT      : '-lay'
+    DBNAMES         : '-dbnames',
+    DELETE          : '-delete',
+    DUPLICATE       : '-dup',
+    EDIT            : '-edit',
+    FIND            : '-find',
+    FINDQUERY       : '-findquery',
+    LAYOUTNAMES     : '-layoutnames',
+    NEW             : '-new',
+    SCRIPTNAMES     : '-scriptnames',
+    RECORDID        : '-recid',
+    MODID           : '-modid',
+    SCRIPTPARAM     : '-script.param',
+
+
+
+
+    MAX             : '-max',
+    SKIP            : '-skip',
+    SCRIPT          : '-script',
+
+
+    LAYOUT          : '-lay',
+    DB              : '-db',
+    RESPONSELAYOUT  : '-lay.reponse'
 
 }
