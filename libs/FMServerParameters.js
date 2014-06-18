@@ -3,6 +3,8 @@ module.exports = {
     FINDALL     : '-findall',
     FINDANY     : '-findany',
     FIND        : '-find',
+
+    DBNAMES     : '-dbnames',
     LAYOUTNAMES : '-layoutnames',
     SCRIPTNAMES : '-scriptnames',
 
