@@ -2,6 +2,7 @@
 var authable        = require('../utils/authable'),
     parentable      = require('../utils/parentable'),
     sendable        = require('../utils/sendable'),
+    pageable        = require('../utils/pageable'),
     grammers        = require('../FMServerGrammers');
 
 
@@ -11,9 +12,11 @@ function LayoutNames(){}
 authable(LayoutNames);
 parentable(LayoutNames);
 sendable(LayoutNames);
+pageable(LayoutNames);
 
 LayoutNames.prototype.queryObject = function(){
-    var qo = this.getParent().queryObject()
+    var qo = this.getParent().queryObject();
+    this.addPaging(qo);
     qo['-layoutnames']=null;
     return qo
 };

@@ -2,6 +2,7 @@
 var authable        = require('../utils/authable'),
     parentable      = require('../utils/parentable'),
     sendable        = require('../utils/sendable'),
+    pageable        = require('../utils/pageable'),
     grammers        = require('../FMServerGrammers');
 
 function DBNames (){}
@@ -11,12 +12,16 @@ function DBNames (){}
 authable(DBNames);
 parentable(DBNames);
 sendable(DBNames);
+pageable(DBNames);
 
 
 DBNames.prototype.queryObject = function(){
-    return {
-        '-dbnames' : null
+
+    var qo = {
+        '-dbnames': null
     }
+    this.addPaging(qo);
+    return qo;
 };
 
 DBNames.prototype.getURL = function () {

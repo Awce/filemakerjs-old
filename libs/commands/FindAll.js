@@ -1,6 +1,7 @@
 var authable        = require('../utils/authable'),
     parentable      = require('../utils/parentable'),
     sendable        = require('../utils/sendable'),
+    pageable        = require('../utils/pageable'),
     grammers        = require('../FMServerGrammers');
 
 function FindAll(){}
@@ -9,9 +10,11 @@ function FindAll(){}
 authable(FindAll);
 parentable(FindAll);
 sendable(FindAll);
+pageable(FindAll);
 
 FindAll.prototype.queryObject = function(){
-    var qo = this.getParent().queryObject()
+    var qo = this.getParent().queryObject();
+    this.addPaging(qo);
     qo['-findall']=null;
     return qo
 };
