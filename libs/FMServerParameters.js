@@ -2,7 +2,9 @@ module.exports = {
 
     FINDALL     : '-findall',
     FINDANY     : '-findany',
-    FIND        : '-find'
+    FIND        : '-find',
+    LAYOUTNAMES : '-layoutnames',
+    SCRIPTNAMES : '-scriptnames',
 
     NEW         : '-new',
     EDIT        : '-edit',
@@ -11,6 +13,6 @@ module.exports = {
     SCRIPT      : '-script',
     LAYOUT      : '-lay',
     DB          : '-db',
-    LAYOUT      : '-lay',
+    LAYOUT      : '-lay'
 
 }
