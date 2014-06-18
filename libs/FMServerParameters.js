@@ -2,6 +2,7 @@ module.exports = {
 
     FINDALL     : '-findall',
     FINDANY     : '-findany',
+    FIND        : '-find'
 
     NEW         : '-new',
     EDIT        : '-edit',
