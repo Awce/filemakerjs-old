@@ -17,27 +17,27 @@ function sendable(obj){
 
     obj.prototype.send = function (callback) {
 
-        // these are provided by the object that sendable gets mixed into
-        var url     = this.getURL(),
-            q       = this.queryObject(),
-            user    = this.getUser();
+        // these 'gets' are provided by the object that this gets mixed into
+        var url         = this.getURL(),
+            q           = this.queryObject(),
+            user        = this.getUser(),
 
-
-
-        var userName    = user.name,
+            post        = request.post(url),
+            userName    = user.name,
             password    = user.password,
             fullURL     = url + "?" + qs.stringify(q);
 
+        // if there is a user you need add auth to the post
+        if(userName || password ){
+            post.auth(userName, password)
+        }
 
-        var promise     = request
-            .post(url)
-            .accept('xml')
-            .auth(userName, password)
-            .query(q)
+
+        //send the post
+        post.query(q)
             .parse(customParser)
-            .promise();
-
-        return promise
+            .accept('xml')
+            .promise()
             .then(function (response) {
                 if (response.ok) {
                     if (response.body.error != 0) {
@@ -60,5 +60,3 @@ function sendable(obj){
     };
 
 }
-
-module.exports = sendable;
