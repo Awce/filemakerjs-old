@@ -60,3 +60,5 @@ function sendable(obj){
     };
 
 }
+
+modole.exports = sendable
