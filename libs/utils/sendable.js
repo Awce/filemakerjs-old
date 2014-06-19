@@ -61,4 +61,4 @@ function sendable(obj){
 
 }
 
-modole.exports = sendable
+module.exports = sendable
