@@ -1,9 +1,23 @@
+/**
+ * AdHoc Command
+ *
+ * This will create a command based on the qo that has been passed in.
+ *
+ * @type {authable|exports}
+ */
+
 var authable        = require('../utils/authable'),
     parentable      = require('../utils/parentable'),
     sendable        = require('../utils/sendable'),
     grammers        = require('../FMServerGrammers');
 
-function AdHocCommand(qo){
+
+/**
+ *
+ * @param {object} queryObject the complete object dictating the params to pass to FM
+ * @constructor
+ */
+function AdHocCommand(queryObject){
     this.qo = qo
 }
 

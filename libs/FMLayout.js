@@ -2,9 +2,8 @@
 
 var authable        = require('./utils/authable'),
     parentable      = require('./utils/parentable'),
-    ScriptNames     = require('./commands/ScriptNames'),
-    LayoutNames     = require('./commands/LayoutNames'),
-    FindAll         = require('./commands/FindAll');
+    SimpleCommand   = require('./commands/SimpleCommand'),
+    fmsParams       = require('./FMServerParameters');
 
 
 function FMLayout(name){
@@ -26,14 +25,20 @@ FMLayout.prototype.getURL = function () {
 
 FMLayout.prototype.queryObject = function () {
     var qo = this.getParent().queryObject()
-    qo['-lay']=this.name;
+    qo[fmsParams.LAYOUT]=this.name;
     return qo;
 };
 
 FMLayout.prototype.findAll = function(){
-    var findAll = new FindAll();
-    findAll.setParent(this);
-    return findAll
-}
+    var command = new SimpleCommand(fmsParams.FINDALL);
+    command.setParent(this);
+    return command
+};
 
-module.exports = FMLayout
+FMLayout.prototype.findAny = function(){
+    var command = new SimpleCommand(fmsParams.FINDANY);
+    command.setParent(this);
+    return command
+};
+
+module.exports = FMLayout;

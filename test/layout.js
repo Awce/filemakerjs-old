@@ -59,7 +59,7 @@ describe('Layout Functions - Callbacks', function () {
     describe('#findAny()', function () {
         it( 'should receive a object with a array property "data" that has a length of 1 ', function (done) {
 
-            layout.findany().max().skip().send(callback);
+            layout.findAny().max().skip().send(callback);
 
             function callback(err, body){
 
@@ -72,7 +72,7 @@ describe('Layout Functions - Callbacks', function () {
     });
 
     describe('#script()', function () {
-        it('should receive an error when give a valid script name' , function (done) {
+        it('should not receive an error when give a valid script name' , function (done) {
             layout.findAny().script(config.testData.script).send(callback)
 
             function callback(err, body){

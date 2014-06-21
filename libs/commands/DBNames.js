@@ -1,3 +1,12 @@
+/**
+ * DBNames Command
+ *
+ * It's a little different then just a SimpleCommmand.
+ * It doesn't pull a query object from a parent first
+ *
+ * @type {authable|exports}
+ */
+
 
 var authable        = require('../utils/authable'),
     parentable      = require('../utils/parentable'),

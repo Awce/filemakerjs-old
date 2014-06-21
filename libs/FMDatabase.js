@@ -2,9 +2,9 @@
 
 var authable        = require('./utils/authable'),
     parentable      = require('./utils/parentable'),
-    ScriptNames     = require('./commands/ScriptNames'),
-    LayoutNames     = require('./commands/LayoutNames');
-    FMLayout        = require('./FMLayout');
+    SimpleCommand   = require('./commands/SimpleCommand'),
+    FMLayout        = require('./FMLayout'),
+    fmsParams       = require('./FMServerParameters');
 
 function FMDatabase( name){
     this.name = name
@@ -25,13 +25,13 @@ FMDatabase.prototype.queryObject = function () {
 };
 
 FMDatabase.prototype.scriptNames =function(){
-    var command = new ScriptNames();
+    var command = new SimpleCommand(fmsParams.SCRIPTNAMES);
     command.setParent(this);
     return command;
 };
 
 FMDatabase.prototype.layoutNames =function(){
-    var command = new LayoutNames();
+    var command = new SimpleCommand(fmsParams.LAYOUTNAMES);
     command.setParent(this);
     return command;
 };
