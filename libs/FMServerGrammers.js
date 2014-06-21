@@ -1,3 +1,11 @@
 
+var grammers = {
+    FMPRESULTSET_PATH : '/fmi/xml/fmresultset.xml',
+    FMPXMLLAYOUT_PATH : '/fmi/xml/FMPXMLLAYOUT.xml',
+    FMPXMLRESULT_PATH : '/fmi/xml/FMPXMLLAYOUT.xml'
 
-module.exports.FMPRESULTSET_PATH = '/fmi/xml/fmresultset.xml';
+};
+
+Object.freeze(grammers);
+
+module.exports = grammers;

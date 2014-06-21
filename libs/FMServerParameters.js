@@ -1,4 +1,4 @@
-module.exports = {
+var obj = {
 
     FINDALL         : '-findall',
     FINDANY         : '-findany',
@@ -30,3 +30,8 @@ module.exports = {
     RESPONSELAYOUT  : '-lay.reponse'
 
 }
+
+Object.freeze(obj);
+
+
+module.exports = obj;

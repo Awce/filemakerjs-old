@@ -15,7 +15,7 @@ describe('Database Functions Callback Flow', function(){
 
         var db
         before(function(done){
-           // db = fms.db(config.testData.dbName);
+            db = fms.db(config.testData.dbName);
             done()
         });
 
@@ -35,7 +35,7 @@ describe('Database Functions Callback Flow', function(){
             })
         })
 
-        describe.skip('#layoutNames()', function () {
+        describe('#layoutNames()', function () {
 
 
             it('it should receive an object with a data array with a length of at least 1', function (done) {
@@ -43,7 +43,6 @@ describe('Database Functions Callback Flow', function(){
                 db.layoutNames().send(callback);
 
                 function callback(err, body){
-                    console.log(err)
                     body.should.be.an('object')
                         .with.property('data')
                         .that.has.length.of.at.least(1);
@@ -53,7 +52,7 @@ describe('Database Functions Callback Flow', function(){
             })
         })
 
-        describe.skip('#scriptNames()', function () {
+        describe('#scriptNames()', function () {
 
 
             it('it should receive an object with a data array with a length of at least 1', function (done) {
@@ -90,7 +89,7 @@ describe('Database Functions Callback Flow', function(){
     })
 });
 
-describe.skip('Database Functions With Promises', function(){
+describe('Database Functions With Promises', function(){
 
     describe('fms', function(){
 

@@ -34,7 +34,7 @@ function sendable(obj){
 
 
         //send the post
-        post.query(q)
+        return post.query(q)
             .parse(customParser)
             .accept('xml')
             .promise()

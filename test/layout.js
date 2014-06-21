@@ -59,7 +59,7 @@ describe('Layout Functions - Callbacks', function () {
     describe('#findAny()', function () {
         it( 'should receive a object with a array property "data" that has a length of 1 ', function (done) {
 
-            layout.findAny().max().skip().send(callback);
+            layout.findany().max().skip().send(callback);
 
             function callback(err, body){
 

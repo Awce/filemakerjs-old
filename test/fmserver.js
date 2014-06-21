@@ -3,7 +3,7 @@ var chai = require('chai'),
     FMServer = require('../index').Server;
 
 
-describe.only('FMServer', function () {
+describe('FMServer', function () {
 
     describe('#constructor' , function () {
         it('should get back an instance even when forgetting new' , function () {
