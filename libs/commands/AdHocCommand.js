@@ -18,7 +18,7 @@ var authable        = require('../utils/authable'),
  * @constructor
  */
 function AdHocCommand(queryObject){
-    this.qo = qo
+    this.qo = queryObject
 }
 
 // mixins
