@@ -69,6 +69,20 @@ describe('Layout Functions - Callbacks', function () {
                 done()
             }
         } )
+
+        it( 'should receive an object with a property "meta" ', function (done) {
+
+            layout.findAny().max().skip().send(callback);
+
+            function callback(err, body){
+
+
+                body.should.be.an('object')
+                    .with.a.property("meta");
+
+                done()
+            }
+        } )
     });
 
     describe('#script()', function () {

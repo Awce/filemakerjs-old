@@ -14,15 +14,15 @@ before(function(done){
       .auth(config.fms.userName, config.fms.password);
 
         done();
- /*   //get a query going based on a layout
+    //get a query going based on a layout
     var query = fms.db(config.testData.dbName).layout(config.testData.layout);
     var records = config.testData.records;
 
     //run a script on the server
-    query.script('resetTest').findAny().send()
+  //  query.script('resetTest').findAny().send()
 
         // then create new records in order
-
+    query.findAll().send()
         .then(function (result) {
             return query.new(records[0]).send()
         })
@@ -42,7 +42,7 @@ before(function(done){
             done()
         })
 
-*/
+
 
 
 });
